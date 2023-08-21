@@ -1052,17 +1052,30 @@ int wm_window_close_exec(bContext *C, wmOperator * /*op*/)
 
 int wm_window_new_exec(bContext *C, wmOperator *op)
 {
-  wmWindow *win_src = CTX_wm_window(C);
+  int sizex = RNA_int_get(op->ptr, "sizex");
+  int sizey = RNA_int_get(op->ptr, "sizey");
+  char title[BKE_ST_MAXNAME];
+  RNA_string_get(op->ptr, "title", title);
+
+  wmWindow *win = CTX_wm_window(C);
+  if (sizex == 0) {
+    sizex = int(win->sizex * 0.95f);
+  }
+
+  if (sizey == 0) {
+    sizey = int(win->sizey * 0.9f);
+  }
+
   ScrArea *area = BKE_screen_find_big_area(CTX_wm_screen(C), SPACE_TYPE_ANY, 0);
   const rcti window_rect = {
       /*xmin*/ 0,
-      /*xmax*/ int(win_src->sizex * 0.95f),
+      /*xmax*/ sizex,
       /*ymin*/ 0,
-      /*ymax*/ int(win_src->sizey * 0.9f),
+      /*ymax*/ sizey,
   };
 
   bool ok = (WM_window_open(C,
-                            IFACE_("Blender"),
+                            IFACE_(title),
                             &window_rect,
                             area->spacetype,
                             false,

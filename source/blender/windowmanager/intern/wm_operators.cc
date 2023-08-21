@@ -2042,6 +2042,17 @@ static void WM_OT_window_new(wmOperatorType *ot)
 
   ot->exec = wm_window_new_exec;
   ot->poll = wm_operator_winactive_normal;
+
+  PropertyRNA *prop;
+  prop = RNA_def_int(ot->srna, "sizex", 0, INT_MIN, INT_MAX, "Size X", "", INT_MIN, INT_MAX);
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
+
+  prop = RNA_def_int(ot->srna, "sizey", 0, INT_MIN, INT_MAX, "Size Y", "", INT_MIN, INT_MAX);
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
+
+  prop = RNA_def_string(
+      ot->srna, "title", IFACE_("Blender"), BKE_ST_MAXNAME, "Title", "Title of the window");
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
 }
 
 static void WM_OT_window_new_main(wmOperatorType *ot)
