@@ -1053,22 +1053,52 @@ int wm_window_close_exec(bContext *C, wmOperator * /*op*/)
 int wm_window_new_exec(bContext *C, wmOperator *op)
 {
   wmWindow *win_src = CTX_wm_window(C);
+  int sizex = RNA_int_get(op->ptr, "width");
+  int sizey = RNA_int_get(op->ptr, "height");
+  int posx = RNA_int_get(op->ptr, "pos_x");
+  int posy = RNA_int_get(op->ptr, "pos_y");
+
+  char title[BKE_ST_MAXNAME];
+  RNA_string_get(op->ptr, "title", title);
+
+  char alignment[BKE_ST_MAXNAME];
+  RNA_string_get(op->ptr, "alignment", alignment);
+
+  eWindowAlignment ALIGNMENT;
+
+  if (alignment == "absolute") {
+    ALIGNMENT = WIN_ALIGN_ABSOLUTE;
+  }
+  else if (alignment == "location_center") {
+    ALIGNMENT = WIN_ALIGN_LOCATION_CENTER;
+  }
+  else {
+    ALIGNMENT = WIN_ALIGN_PARENT_CENTER;
+  }
+
+  if (sizex <= 0) {
+    sizex = int(win_src->sizex * 0.95f);
+  }
+  if (sizey <= 0) {
+    sizey = int(win_src->sizey * 0.9f);
+  }
+
   ScrArea *area = BKE_screen_find_big_area(CTX_wm_screen(C), SPACE_TYPE_ANY, 0);
   const rcti window_rect = {
-      /*xmin*/ 0,
-      /*xmax*/ int(win_src->sizex * 0.95f),
-      /*ymin*/ 0,
-      /*ymax*/ int(win_src->sizey * 0.9f),
+      /*xmin*/ posx,
+      /*xmax*/ posx + sizex,
+      /*ymin*/ posy,
+      /*ymax*/ posy + sizey,
   };
 
   bool ok = (WM_window_open(C,
-                            IFACE_("Blender"),
+                            IFACE_(title),
                             &window_rect,
                             area->spacetype,
                             false,
                             false,
                             false,
-                            WIN_ALIGN_PARENT_CENTER,
+                            ALIGNMENT,
                             nullptr,
                             nullptr) != nullptr);
 

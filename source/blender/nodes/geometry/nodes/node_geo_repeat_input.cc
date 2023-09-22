@@ -123,3 +123,4 @@ bool NOD_geometry_repeat_input_pair_with_output(const bNodeTree *node_tree,
   storage.output_node_id = repeat_output_node->identifier;
   return true;
 }
+

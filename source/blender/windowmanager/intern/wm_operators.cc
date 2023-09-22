@@ -2042,6 +2042,49 @@ static void WM_OT_window_new(wmOperatorType *ot)
 
   ot->exec = wm_window_new_exec;
   ot->poll = wm_operator_winactive_normal;
+
+  PropertyRNA *prop;
+
+  prop = RNA_def_string(
+      ot->srna, "title", "Blender", BKE_ST_MAXNAME, "Title", "Title of the window");
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
+
+  prop = RNA_def_string(
+      ot->srna,
+      "alignment",
+      "parent_center",
+      BKE_ST_MAXNAME,
+      "Alignment",
+      "Alignment of the window. Can be 'parent_center' or 'location_center' or 'absolute'");
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
+
+  prop = RNA_def_int(
+      ot->srna, "width", 0, INT_MIN, INT_MAX, "Width", "Width of the window", INT_MIN, INT_MAX);
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
+  prop = RNA_def_int(
+      ot->srna, "height", 0, INT_MIN, INT_MAX, "Height", "Height of the window", INT_MIN, INT_MAX);
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
+
+  prop = RNA_def_int(ot->srna,
+                     "pos_x",
+                     0,
+                     INT_MIN,
+                     INT_MAX,
+                     "Position X",
+                     "X position of the window",
+                     INT_MIN,
+                     INT_MAX);
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
+  prop = RNA_def_int(ot->srna,
+                     "pos_y",
+                     0,
+                     INT_MIN,
+                     INT_MAX,
+                     "Position Y",
+                     "Y position of the window",
+                     INT_MIN,
+                     INT_MAX);
+  RNA_def_property_flag(prop, PROP_SKIP_SAVE);
 }
 
 static void WM_OT_window_new_main(wmOperatorType *ot)
